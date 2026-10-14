@@ -36,11 +36,19 @@ button:disabled { cursor: default; }
 .stack { display: flex; flex-direction: column; gap: 10px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
+/* 픽셀아트: 확대해도 픽셀이 뭉개지지 않게 */
+.pixel, .pixel-icon img { image-rendering: pixelated; image-rendering: crisp-edges; }
+.pixel-icon {
+  display: inline-block; vertical-align: middle; flex-shrink: 0; background: currentColor;
+  -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat;
+}
+.pixel-icon img { display: block; height: 100%; width: auto; visibility: hidden; }
+
 /* 로고 */
 .logo { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
 .logo-word { font-family: var(--font-en); font-weight: 900; letter-spacing: -0.04em; display: inline-flex; align-items: flex-end; }
 .logo-u { position: relative; display: inline-block; }
-.logo-arrow { position: absolute; left: 50%; bottom: 0.18em; width: 0.42em; height: 0.82em; transform: translateX(-50%); }
+.logo-arrow { position: absolute; left: 50%; bottom: 0.18em; height: 0.82em; width: auto; transform: translateX(-50%); }
 .logo-sub { margin-top: 8px; font-size: 10px; letter-spacing: 0.32em; font-family: var(--font-en); font-weight: 700; }
 
 /* 버튼 */
@@ -159,8 +167,8 @@ button:disabled { cursor: default; }
 .clock { font-family: var(--font-en); font-weight: 900; font-size: 22px; }
 .clock.big { font-size: 80px; }
 
-.burst { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; animation: boom 0.5s cubic-bezier(.2,1.6,.4,1); }
-.burst-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.burst { position: relative; width: 270px; height: 276px; max-width: 100%; display: flex; align-items: center; justify-content: center; animation: boom 0.5s cubic-bezier(.2,1.6,.4,1); }
+.burst-img { position: absolute; inset: 0; width: 100%; height: 100%; }
 .burst-text { position: relative; font-size: 56px; font-weight: 900; letter-spacing: -0.04em; }
 @keyframes boom { from { transform: scale(0.3) rotate(-20deg); opacity: 0; } }
 
@@ -212,13 +220,15 @@ button:disabled { cursor: default; }
 .bomb-stage { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
 .bomb-wrap { position: relative; display: inline-flex; }
 .bomb-digits {
-  position: absolute; left: 48%; top: 59%; transform: translate(-50%, -50%); font-family: var(--font-en); font-weight: 900;
+  position: absolute; left: 45%; top: 67%; transform: translate(-50%, -50%); font-family: var(--font-en); font-weight: 900;
   font-size: 40px; color: var(--lime); letter-spacing: 0.02em;
 }
 .bomb-wrap.shake { animation: shake 0.5s infinite; }
 .bomb-wrap.danger.shake { animation-duration: 0.18s; }
 .bomb-wrap.danger .bomb-digits { color: #ff5a4f; }
-.spark { animation: flicker 0.25s infinite alternate; transform-origin: 168px 33px; }
+.bomb-img { position: relative; display: inline-block; }
+.bomb-img img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.spark { animation: flicker 0.25s steps(2) infinite alternate; transform-origin: 69.5% 22%; }
 @keyframes shake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
 @keyframes flicker { to { transform: scale(0.75); opacity: 0.7; } }
 .screen.holding { background: linear-gradient(#faf9f3, #efffe6); }

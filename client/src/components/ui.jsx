@@ -1,4 +1,31 @@
 import React from 'react';
+import arrowPng from '../assets/pixel/arrow.png';
+import bombPng from '../assets/pixel/bomb.png';
+import sparkPng from '../assets/pixel/bomb-spark.png';
+import burstPng from '../assets/pixel/burst.png';
+import crownPng from '../assets/pixel/crown.png';
+import iconNunchi from '../assets/pixel/icon-nunchi.png';
+import iconMinority from '../assets/pixel/icon-minority.png';
+import iconLiar from '../assets/pixel/icon-liar.png';
+import iconBomb from '../assets/pixel/icon-bomb.png';
+
+// 픽셀아트 이미지(PixelLab 생성, art-src/ 참고). 단색 아이콘은 CSS mask 로 글자색(currentColor)을 입힌다.
+const ICONS = { nunchi: iconNunchi, minority: iconMinority, liar: iconLiar, bomb: iconBomb };
+
+export function PixelIcon({ src, height = 24, label, className = '' }) {
+  return (
+    <i
+      className={`pixel-icon ${className}`}
+      role={label ? 'img' : undefined}
+      aria-label={label}
+      aria-hidden={label ? undefined : true}
+      style={{ height, '--src': `url(${src})` }}
+    >
+      {/* 보이지 않는 원본으로 가로 크기(비율)를 잡는다 */}
+      <img src={src} alt="" />
+    </i>
+  );
+}
 
 // 로고: U 위로 라임 화살표가 솟아오르는 NUNCHUP 워드마크
 export function Logo({ size = 44, sub = false }) {
@@ -8,9 +35,7 @@ export function Logo({ size = 44, sub = false }) {
         NUNCH
         <span className="logo-u">
           U
-          <svg className="logo-arrow" viewBox="0 0 20 30" aria-hidden="true">
-            <path d="M10 1 L19 12 H13.5 V29 H6.5 V12 H1 Z" fill="var(--lime)" stroke="var(--black)" strokeWidth="1.6" strokeLinejoin="round" />
-          </svg>
+          <img className="logo-arrow pixel" src={arrowPng} alt="" aria-hidden="true" />
         </span>
         P
       </span>
@@ -54,41 +79,23 @@ export function TopBar({ title, right, left }) {
 
 export function Crown() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-label="방장">
-      <path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z" fill="currentColor" />
-    </svg>
+    <PixelIcon src={crownPng} height={15} label="방장" className="crown" />
   );
 }
 
-export function Bomb({ size = 180, lit = true }) {
+export function Bomb({ size = 192, lit = true }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 200 200" className="bomb-svg">
-      <path d="M128 52 q18 -26 38 -18" stroke="var(--black)" strokeWidth="7" fill="none" strokeLinecap="round" />
-      <rect x="110" y="44" width="30" height="22" rx="5" transform="rotate(35 125 55)" fill="var(--black)" />
-      {lit && (
-        <g className="spark">
-          <circle cx="168" cy="33" r="10" fill="var(--lime)" />
-          <path d="M168 12v8M168 46v8M147 33h8M181 33h8M153 18l5 5M178 43l5 5M183 18l-5 5M158 43l-5 5" stroke="var(--black)" strokeWidth="3" strokeLinecap="round" />
-        </g>
-      )}
-      <circle cx="96" cy="118" r="66" fill="var(--black)" />
-      <path d="M58 98 a44 44 0 0 1 30 -26" stroke="#FAF9F3" strokeOpacity=".35" strokeWidth="8" fill="none" strokeLinecap="round" />
-    </svg>
+    <span className="bomb-img" style={{ width: size, height: size }}>
+      <img className="pixel" src={bombPng} alt="" />
+      {lit && <img className="pixel spark" src={sparkPng} alt="" />}
+    </span>
   );
 }
 
 export function Burst({ children }) {
   return (
     <div className="burst">
-      <svg viewBox="0 0 200 200" className="burst-svg" aria-hidden="true">
-        <polygon
-          points="100,8 118,62 172,36 140,86 194,104 138,118 162,174 108,138 92,194 80,138 24,166 56,116 6,96 62,82 34,30 86,60"
-          fill="var(--lime)"
-          stroke="var(--black)"
-          strokeWidth="4"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <img className="burst-img pixel" src={burstPng} alt="" aria-hidden="true" />
       <span className="burst-text">{children}</span>
     </div>
   );
@@ -121,30 +128,5 @@ export function DeltaList({ room, deltas, highlight = [] }) {
 }
 
 export function GameIcon({ id, size = 26 }) {
-  const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'currentColor', 'aria-hidden': true };
-  switch (id) {
-    case 'nunchi':
-      return <svg {...common}><path d="M13 2L4 14h6l-1 8 9-12h-6z" /></svg>;
-    case 'minority':
-      return (
-        <svg {...common}>
-          <circle cx="7" cy="8" r="3" /><circle cx="17" cy="8" r="3" /><circle cx="12" cy="5" r="2.4" />
-          <path d="M1.5 19a5.5 5.5 0 0 1 11 0zM11.5 19a5.5 5.5 0 0 1 11 0z" />
-        </svg>
-      );
-    case 'liar':
-      return (
-        <svg {...common}>
-          <path d="M7 10V7a5 5 0 0 1 10 0v3h1.5a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20.5v-9A1.5 1.5 0 0 1 5.5 10zm2.5 0h5V7a2.5 2.5 0 0 0-5 0z" />
-        </svg>
-      );
-    case 'bomb':
-      return (
-        <svg {...common}>
-          <circle cx="10" cy="14" r="7.5" /><path d="M14 7l2-2 2 2-2 2z" /><path d="M17 5q2-3 4-2" stroke="currentColor" strokeWidth="1.6" fill="none" />
-        </svg>
-      );
-    default:
-      return null;
-  }
+  return ICONS[id] ? <PixelIcon src={ICONS[id]} height={size} /> : null;
 }

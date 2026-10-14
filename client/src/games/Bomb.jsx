@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { act, serverNow } from '../net.js';
 import { useRemaining, buzz } from '../hooks.js';
-import { Avatar, Bomb as BombIcon, Burst, Countdown, DeltaList, Button } from '../components/ui.jsx';
+import { Avatar, Bomb as BombIcon, Burst, Countdown, DeltaList, Button, GameIcon } from '../components/ui.jsx';
 import { GameHeader, SpectatorNote, nameOf, playerOf } from './common.jsx';
 
 export default function Bomb({ room, game, me, spectator }) {
@@ -18,7 +18,7 @@ export default function Bomb({ room, game, me, spectator }) {
       <main className="screen game">
         <GameHeader game={game} />
         <div className="center grow">
-          <BombIcon size={140} lit={false} />
+          <BombIcon size={128} lit={false} />
           <p className="lead strong">폭탄이 곧 등장합니다!</p>
           <Countdown ms={remaining} />
           <p className="muted">언제 터질지 아무도 몰라요. 마지막 5초만 공개돼요.</p>
@@ -55,7 +55,7 @@ export default function Bomb({ room, game, me, spectator }) {
           {game.isHolder ? '지금 당신이 폭탄을 들고 있습니다!' : `폭탄은 지금 ${nameOf(room, holder)}에게!`}
         </p>
         <div className={`bomb-wrap ${danger ? 'danger' : ''} ${game.isHolder ? 'shake' : ''}`}>
-          <BombIcon size={game.isHolder ? 170 : 120} />
+          <BombIcon size={game.isHolder ? 192 : 128} />
           <span className="bomb-digits">{danger ? String(secs).padStart(2, '0') : '??'}</span>
         </div>
         <p className="muted">{danger ? `${secs}초` : '폭발 시간은 비밀'}{game.lastFrom && ` · ${nameOf(room, game.lastFrom)}에게서 넘어옴`}</p>
@@ -81,7 +81,7 @@ export default function Bomb({ room, game, me, spectator }) {
           {game.players.map((id) => (
             <span key={id} className={`claim ${id === holder ? 'done' : ''}`}>
               <Avatar player={playerOf(room, id)} size={34} />
-              <b>{id === holder ? '💣' : ''}</b>
+              <b>{id === holder && <GameIcon id="bomb" size={16} />}</b>
             </span>
           ))}
         </div>

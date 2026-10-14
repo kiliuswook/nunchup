@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { act } from '../net.js';
 import { useRemaining, fmtClock } from '../hooks.js';
-import { Avatar, Button } from '../components/ui.jsx';
+import { Avatar, Button, GameIcon } from '../components/ui.jsx';
 import { GameHeader, SpectatorNote, nameOf, playerOf } from './common.jsx';
 
 const ROLE_STEPS = { role: 1, discuss: 2, vote: 3, guess: 3, reveal: 4 };
@@ -10,7 +10,7 @@ function RoleCard({ game, hidden }) {
   const isLiar = game.role === 'liar';
   return (
     <div className={`role-card ${hidden ? 'hidden' : ''}`}>
-      <span className="lock">🔒</span>
+      <span className="lock"><GameIcon id="liar" size={30} /></span>
       <span className="muted-inv">당신의 역할은</span>
       <strong className="role-name">{isLiar ? '라이어' : '시민'}</strong>
       <span className="muted-inv">카테고리 · {game.category}</span>
