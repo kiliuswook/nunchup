@@ -1,0 +1,13 @@
+{
+  "name": "nunchup",
+  "private": true,
+  "version": "0.1.0",
+  "description": "NUNCHUP — 모바일 소셜 파티 게임 (MVP)",
+  "workspaces": ["server", "client"],
+  "scripts": {
+    "dev": "npm run dev -w server & npm run dev -w client",
+    "build": "npm run build -w client",
+    "start": "npm start -w server",
+    "test": "npm test -w server"
+  }
+}
