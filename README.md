@@ -21,6 +21,25 @@
 
 화면 예시는 `docs/` 폴더의 스크린샷을 참고하세요.
 
+## 두 가지 실행 방식
+
+| | 서버 모드 (기본) | P2P 모드 (GitHub Pages) |
+| --- | --- | --- |
+| 게임 서버 | Node 서버 (`server/`) | 방장의 브라우저 |
+| 필요한 것 | Node 서버 호스팅 | 정적 호스팅만 (GitHub Pages) |
+| 빠른 시작 | 지원 | 미지원 (공개방 목록이 없음) |
+| 방장이 나가면 | 다른 사람이 방장 승계 | 방이 종료됨 |
+
+게임 규칙과 룸 로직(`server/src/rooms.js`, `games/`)은 두 방식이 그대로 공유합니다. P2P 모드는 `server/src/hub.js`를 브라우저에서 실행하고, PeerJS(WebRTC 데이터 채널)로 참가자를 연결합니다. 연결 중계(시그널링)는 기본으로 PeerJS 공용 서버를 쓰고, `VITE_PEER_HOST` 등으로 직접 운영하는 서버를 지정할 수 있습니다.
+
+### GitHub Pages 배포
+
+`main` 브랜치에 푸시하면 `.github/workflows/pages.yml`이 테스트 → P2P 빌드 → Pages 배포를 자동으로 합니다. 처음 한 번은 저장소의 **Settings → Pages → Source**를 **GitHub Actions**로 지정해야 합니다.
+
+로컬에서 P2P 빌드 확인: `VITE_P2P=1 npm run build` 후 `client/dist`를 아무 정적 서버로 열면 됩니다.
+
+> 방장 휴대폰의 화면이 꺼지거나 앱이 백그라운드로 가면 브라우저가 타이머를 늦춰 게임 진행이 멈출 수 있습니다. 방장은 화면을 켜 둔 채로 플레이하세요.
+
 ## 기술 스택
 
 - **서버**: Node.js 22, Express, Socket.IO — 룸/게임 상태와 모든 판정을 서버가 가집니다.

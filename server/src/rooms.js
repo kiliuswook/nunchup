@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { GAMES } from './games/index.js';
 
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -160,7 +159,7 @@ export class RoomManager {
     if (typeof token !== 'string' || token.length < 8) throw new GameError('잘못된 세션이에요.');
     let s = this.sessions.get(token);
     if (!s) {
-      s = { playerId: randomUUID().slice(0, 8), roomCode: null };
+      s = { playerId: globalThis.crypto.randomUUID().slice(0, 8), roomCode: null };
       this.sessions.set(token, s);
     }
     return s;
@@ -178,10 +177,11 @@ export class RoomManager {
     }
   }
 
-  createRoom(session, name, { isPublic = false } = {}) {
+  createRoom(session, name, { isPublic = false, code } = {}) {
     const n = cleanName(name);
     this.leave(session);
-    const room = new Room(this, this.newCode(), isPublic);
+    if (code && this.rooms.has(code)) throw new GameError('이미 있는 방 코드예요.');
+    const room = new Room(this, code ?? this.newCode(), isPublic);
     this.rooms.set(room.code, room);
     session.roomCode = room.code;
     room.addPlayer(session.playerId, n);

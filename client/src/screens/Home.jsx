@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { send, loadName, saveName } from '../net.js';
+import { send, loadName, saveName, features } from '../net.js';
 import { Logo, Button } from '../components/ui.jsx';
 import { toast } from '../toast.js';
 
@@ -50,16 +50,18 @@ export default function Home() {
             />
           </label>
           <Button arrow disabled={busy || code.length !== 4} onClick={() => go('room:join', { code })}>
-            입장하기
+            {busy ? '연결 중…' : '입장하기'}
           </Button>
           <Button variant="ghost" onClick={() => setJoining(false)}>돌아가기</Button>
         </div>
       ) : (
         <div className="stack">
-          <Button arrow disabled={busy} onClick={() => go('room:create')}>파티 시작</Button>
-          <div className="row2">
+          <Button arrow disabled={busy} onClick={() => go('room:create')}>{busy ? '방 만드는 중…' : '파티 시작'}</Button>
+          <div className={features.quickStart ? 'row2' : 'stack'}>
             <Button variant="secondary" disabled={busy} onClick={() => setJoining(true)}>방 참가</Button>
-            <Button variant="secondary" disabled={busy} onClick={() => go('room:quick')}>빠른 시작</Button>
+            {features.quickStart && (
+              <Button variant="secondary" disabled={busy} onClick={() => go('room:quick')}>빠른 시작</Button>
+            )}
           </div>
         </div>
       )}

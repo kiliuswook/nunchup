@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useStore } from './net.js';
+import { useStore, clearNotice } from './net.js';
 import { setToastHandler } from './toast.js';
 import Home from './screens/Home.jsx';
 import Lobby from './screens/Lobby.jsx';
@@ -13,7 +13,7 @@ const GAME_VIEWS = { nunchi: Nunchi, minority: Minority, liar: Liar, bomb: Bomb 
 
 
 export default function App() {
-  const { connected, me, room } = useStore();
+  const { connected, me, room, notice } = useStore();
   const [msg, setMsg] = useState(null);
 
   useEffect(() => {
@@ -24,6 +24,15 @@ export default function App() {
       h = setTimeout(() => setMsg(null), 2600);
     });
   }, []);
+
+  useEffect(() => {
+    if (notice) {
+      setMsg(notice);
+      clearNotice();
+      const h = setTimeout(() => setMsg(null), 4000);
+      return () => clearTimeout(h);
+    }
+  }, [notice]);
 
   let screen;
   if (!room) screen = <Home />;
